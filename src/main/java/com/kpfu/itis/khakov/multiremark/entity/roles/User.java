@@ -64,7 +64,7 @@ public class User implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Arrays.asList(new SimpleGrantedAuthority(
-				role != null ? role.name() : Role.STUDENT.name()
+				role != null ? role.name() : Role.ROLE_STUDENT.name()
 				)
 		);
 	}

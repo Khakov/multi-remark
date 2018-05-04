@@ -6,6 +6,7 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class Question {
 	@Relationship(type = "QUESTION_ANSWERS")
 	private List<Answer> answers;
 
-	@Relationship(type = "QUESTION", direction =  Relationship.INCOMING)
+	@Relationship(type = "QUESTION", direction = Relationship.INCOMING)
 	private List<Task> tasks;
 
 	private QuestionType type;
@@ -65,5 +66,15 @@ public class Question {
 
 	public void setType(QuestionType type) {
 		this.type = type;
+	}
+
+	public void addTask(Task task) {
+		if (task != null) {
+			if (tasks == null) {
+				tasks = Collections.singletonList(task);
+			} else {
+				tasks.add(task);
+			}
+		}
 	}
 }

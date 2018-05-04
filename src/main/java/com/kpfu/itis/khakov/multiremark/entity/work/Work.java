@@ -33,6 +33,9 @@ public class Work {
 	@Relationship(type = "PREVIOUS_WORK", direction = Relationship.INCOMING)
 	private Work nextWork;
 
+	@Relationship(type = "WORK_ANSWER")
+	private WorkAnswer workAnswer;
+
 /*	@Relationship(type = "WORK_STATUS")
 	private WorkStatus status;*/
 
