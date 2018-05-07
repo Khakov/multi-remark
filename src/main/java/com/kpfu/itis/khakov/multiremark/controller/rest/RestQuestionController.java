@@ -1,6 +1,5 @@
 package com.kpfu.itis.khakov.multiremark.controller.rest;
 
-import com.kpfu.itis.khakov.multiremark.entity.roles.Teacher;
 import com.kpfu.itis.khakov.multiremark.entity.task.Question;
 import com.kpfu.itis.khakov.multiremark.entity.task.Task;
 import com.kpfu.itis.khakov.multiremark.service.QuestionService;

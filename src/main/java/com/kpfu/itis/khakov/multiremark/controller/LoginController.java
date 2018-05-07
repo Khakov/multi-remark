@@ -24,6 +24,6 @@ public class LoginController {
 		if (error != null && error) {
 			model.addAttribute("error", true);
 		}
-		return "login";
+		return "log";
 	}
 }

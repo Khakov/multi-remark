@@ -1,7 +1,5 @@
 package com.kpfu.itis.khakov.multiremark.config;
 
-import com.kpfu.itis.khakov.multiremark.entity.roles.Role;
-import com.kpfu.itis.khakov.multiremark.entity.roles.Teacher;
 import com.kpfu.itis.khakov.multiremark.entity.roles.User;
 import com.kpfu.itis.khakov.multiremark.repository.role.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

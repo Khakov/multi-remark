@@ -14,7 +14,7 @@ public class SecurityUtils {
 	}
 
 	public static Role getUserAuthtority(User user) {
-		return user.getAuthorities().stream().findFirst().map(r->Role.valueOf(r.getAuthority())).orElse(Role.ROLE_STUDENT);
+		return user.getAuthorities().stream().findFirst().map(r -> Role.valueOf(r.getAuthority())).orElse(Role.ROLE_STUDENT);
 	}
 
 }

@@ -16,27 +16,5 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class MainController {
-	private final TaskService taskService;
-	private final StudentService studentService;
 
-
-	@Autowired
-	public MainController(TaskService taskService, StudentService studentService) {
-		this.taskService = taskService;
-		this.studentService = studentService;
-	}
-
-	@GetMapping(ApplicationUrls.MAIN)
-	public String getMainPage(ModelMap modelMap) {
-		User user = SecurityUtils.getCurrentUser();
-		Role role = SecurityUtils.getUserAuthtority(user);
-		modelMap.addAttribute("user", user);
-		modelMap.addAttribute("tasks", taskService.getAllTasks());
-		if (role == Role.ROLE_STUDENT) {
-			return "student_page";
-		} else {
-			modelMap.addAttribute("students", studentService.getAllStudents());
-			return "teacher_page";
-		}
-	}
 }
