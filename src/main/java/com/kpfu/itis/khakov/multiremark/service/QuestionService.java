@@ -5,6 +5,8 @@ import com.kpfu.itis.khakov.multiremark.repository.task.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author Rustam Khakov
  */
@@ -20,4 +22,9 @@ public class QuestionService {
 	public Question createQuestion(Question question) {
 		return questionRepository.save(question);
 	}
+
+	public List<Question> getAllQuestion() {
+		return questionRepository.getAll();
+	}
+
 }

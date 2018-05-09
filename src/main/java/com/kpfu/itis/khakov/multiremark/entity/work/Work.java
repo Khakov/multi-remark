@@ -3,6 +3,7 @@ package com.kpfu.itis.khakov.multiremark.entity.work;
 import com.kpfu.itis.khakov.multiremark.entity.roles.Student;
 import com.kpfu.itis.khakov.multiremark.entity.states.WorkMark;
 import com.kpfu.itis.khakov.multiremark.entity.states.WorkState;
+import com.kpfu.itis.khakov.multiremark.entity.task.Answer;
 import com.kpfu.itis.khakov.multiremark.entity.task.Task;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
@@ -36,7 +37,25 @@ public class Work {
 	@Relationship(type = "WORK_ANSWER")
 	private WorkAnswer workAnswer;
 
-/*	@Relationship(type = "WORK_STATUS")
+	@Relationship
+	private Answer answer;
+
+	public WorkAnswer getWorkAnswer() {
+		return workAnswer;
+	}
+
+	public void setWorkAnswer(WorkAnswer workAnswer) {
+		this.workAnswer = workAnswer;
+	}
+
+	public Answer getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(Answer answer) {
+		this.answer = answer;
+	}
+	/*	@Relationship(type = "WORK_STATUS")
 	private WorkStatus status;*/
 
 	@Relationship

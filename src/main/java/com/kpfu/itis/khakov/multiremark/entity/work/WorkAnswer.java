@@ -14,4 +14,23 @@ public class WorkAnswer {
 	@Relationship(type = "WORK_ANSWER")
 	private Work work;
 
+	public WorkAnswer(String text) {
+		this.text = text;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public Work getWork() {
+		return work;
+	}
+
+	public void setWork(Work work) {
+		this.work = work;
+	}
 }

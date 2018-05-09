@@ -4,9 +4,12 @@
       <button v-on:click="logout($event)">logout</button>
     </div>
     <div v-else>
-      <router-link to="/login">login</router-link>
+      <router-link to="/login">login</router-link><br>
+      <router-link to="/add_question">add question</router-link>
+
     </div>
     <router-view></router-view>
+
   </div>
 </template>
 

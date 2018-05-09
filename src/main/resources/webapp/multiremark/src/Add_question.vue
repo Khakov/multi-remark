@@ -1,8 +1,14 @@
 <template>
   <div id="app">
     <input type="text" v-model="this.question.text"/>
-    <li v-for="ans in question.answers"><input type="checkbox" :value="ans.value">{{ans.value}}</li>
-    <input type="text" @keyup.enter="addAnswer($event)"/>
+    <select v-model="question.type">
+      <option value="SIMPLE" selected>choice question</option>
+      <option value="TEXT">text question</option>
+    </select>
+    <div v-if="question.type === 'SIMPLE'">
+      <li v-for="ans in question.answers"><input type="checkbox" :value="ans.value">{{ans.value}}</li>
+      <input type="text" @keyup.enter="addAnswer($event)"/>
+    </div>
   </div>
 </template>
 
@@ -24,6 +30,7 @@
         },
         msg: 'Welcome to Your Vue.js App',
         question: {
+          type: "SIMPLE",
           value: "Linux vs Windows",
           answers: [{value: 'Linux'}, {value: 'Windows'}],
         },
