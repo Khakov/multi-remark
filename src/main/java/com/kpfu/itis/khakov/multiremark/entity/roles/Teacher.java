@@ -13,13 +13,9 @@ import java.util.List;
  * @author Rustam Khakov
  */
 @NodeEntity
-public class Teacher extends User{
-	/*@Id
-	@GeneratedValue
-	private Long id;*/
+public class Teacher extends User {
 
 	private String name;
-
 
 	@Relationship(type = "STUDENT_TEACHER")
 	private List<Student> students;
@@ -29,14 +25,6 @@ public class Teacher extends User{
 
 	@Relationship
 	List<Task> tasks;
-
-/*	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}*/
 
 	public String getName() {
 		return name;

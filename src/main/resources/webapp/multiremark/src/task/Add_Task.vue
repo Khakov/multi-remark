@@ -1,13 +1,17 @@
 <template>
   <div id="app">
-    <input type="text" v-model="this.question.text"/>
-    <select v-model="question.type">
-      <option value="SIMPLE" selected>choice question</option>
-      <option value="TEXT">text question</option>
-    </select>
-    <div v-if="question.type === 'SIMPLE'">
-      <li v-for="ans in question.answers"><input type="checkbox" :value="ans.value">{{ans.value}}</li>
-      <input type="text" @keyup.enter="addAnswer($event)"/>
+    <div id="app">
+      <form v-on:submit="addTask($event)">
+        <select v-model="task.workType.type">
+          <option value="TEST" selected>TEST</option>
+          <option value="TEXT">TEXT</option>
+          <option value="PROJECT">PROJECT</option>
+          <option value="CODE">CODE</option>
+        </select>
+        <input v-model="task.name" placeholder="name">
+        <input v-model="task.text" placeholder="text">
+        <button type="submit">send</button>
+      </form>
     </div>
   </div>
 </template>
@@ -18,35 +22,35 @@
   import router from 'vue-router'
 
   export default {
-    created() {
-
-    },
     name: 'app',
     data() {
       return {
-        info: {
-          login: "",
-          password: ""
+        task: {
+          name: null,
+          text: null,
+          workType: {
+            type: "TEST"
+          }
         },
-        msg: 'Welcome to Your Vue.js App',
         question: {
-          type: "SIMPLE",
-          value: "Linux vs Windows",
-          answers: [{value: 'Linux'}, {value: 'Windows'}],
+          text: "Linux vs Windows",
+          answers: ['Linux', 'Windows'],
         },
         answer: '',
       }
     },
     methods: {
-      addAnswer(event) {
-        this.question.answers.push({value: event.target.value});
+      addTask(event) {
+//        this.task.answers.push(event.target.value);
+        axios.post('/api/tasks', this.task).then(function (response) {
+          console.log(response)
+        }.bind(this))
+
         axios.get('/main', null).then(function (response) {
-          if (response.status > 400) {
-            this.$router.push("/login")
-          }
+          console.log(response)
         }.bind(this))
       },
-      login_method: function (event) {
+      /*login_method: function (event) {
         event.preventDefault();
         const form_data = new FormData();
         form_data.append("login", "teacher@teacher.com");
@@ -55,7 +59,7 @@
         axios.post('/api/login', form_data).then(function (response) {
           console.log(response)
         }.bind(this))
-      }
+      }*/
     }
   }
 </script>

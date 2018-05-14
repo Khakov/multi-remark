@@ -1,0 +1,64 @@
+<template>
+  <div id="app">
+    <label>Done tasks</label><br/>
+    <li v-for="t in tasks.true"><input type="checkbox" :value="t.id">{{t.id}}<br/></li>
+    <label>not done tasks</label><br/>
+    <li v-for="t in tasks.false"><div><input type="checkbox" :value="t.id">{{t.id}}, {{t.name}},{{t.text}}, {{t.workType.type}},<br/></div>
+    </li>
+  </div>
+</template>
+
+<script>
+
+  import axios from 'axios'
+  import router from 'vue-router'
+
+  export default {
+    name: 'app',
+    data() {
+      return {
+        tasks: Map
+      }
+    },
+    created() {
+      axios.get('/api/tasks/all', null).then(function (response) {
+          if (response.status > 400 && response.status < 404) {
+            this.$router.push("/login")
+          } else {
+            this.tasks = response.data;
+          }
+        }.bind(this)
+      )
+    },
+    methods: {}
+  }
+</script>
+
+<style>
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+  }
+
+  h1, h2 {
+    font-weight: normal;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+    display: inline-block;
+    margin: 0 10px;
+  }
+
+  a {
+    color: #42b983;
+  }
+</style>

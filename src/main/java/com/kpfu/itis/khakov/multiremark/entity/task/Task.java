@@ -22,7 +22,7 @@ public class Task {
 	private String text;
 
 	@Relationship
-	Teacher teacher;
+	private Teacher teacher;
 
 	@Relationship
 	private List<Work> works;
@@ -39,6 +39,15 @@ public class Task {
 	@Relationship(type = "QUESTION")
 	private List<Question> questions;
 
+	private int maxEdit;
+
+	public int getMaxEdit() {
+		return maxEdit;
+	}
+
+	public void setMaxEdit(int maxEdit) {
+		this.maxEdit = maxEdit;
+	}
 
 	public Long getId() {
 		return id;

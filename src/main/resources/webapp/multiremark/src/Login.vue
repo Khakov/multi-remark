@@ -5,7 +5,7 @@
       <input v-model="info.password" placeholder="password" type="password">
       <button type="submit">send</button>
     </form>
-    <input type="text" @keyup.enter="addAnswer($event)">
+    <!--<input type="text" @keyup.enter="addAnswer($event)">-->
   </div>
 </template>
 
@@ -20,20 +20,20 @@
           login: "",
           password: ""
         },
-        msg: 'Welcome to Your Vue.js App',
-        question: {
-          text: "Linux vs Windows",
-          answers: ['Linux', 'Windows'],
-        },
-        answer: '',
+//        msg: 'Welcome to Your Vue.js App',
+//        question: {
+//          text: "Linux vs Windows",
+//          answers: ['Linux', 'Windows'],
+//        },
+//        answer: '',
       }
     },
     methods: {
       login_method: function (event) {
         event.preventDefault();
         const form_data = new FormData();
-        form_data.append("login", "teacher@teacher.com");
-        form_data.append("password", "password");
+        form_data.append("login", this.info.login);//"teacher@teacher.com"
+        form_data.append("password", this.info.password);//"password"
 
         axios.post('/api/login', form_data).then(function (response) {
           console.log(response);
@@ -41,30 +41,30 @@
           if (response.status === 200) {
             this.$store.commit('add_user', {'user': 'user'});
             console.log(this.$store.state.user);
-            this.$router.push('/main')
+            this.$router.push('/tasks')
           }
         }.bind(this))
       }
 
-/*      addAnswer(event) {
-        this.question.answers.push(event.target.value);
-        axios.get('/api/main', null).then(function (response) {
-          console.log(response)
-        }.bind(this))
-      },
-      login_method: function (event) {
-        event.preventDefault();
-        const form_data = new FormData();
-        form_data.append("login", "teacher@teacher.com");
-        form_data.append("password", "password");
-//        this.$store.state.user
-        axios.post('/api/login', form_data).then(function (response) {
-          console.log(response);
-          if (response.status === 200) {
-            this.$router.push('/main')
-          }
-        }.bind(this))
-      }*/
+      /*      addAnswer(event) {
+              this.question.answers.push(event.target.value);
+              axios.get('/api/main', null).then(function (response) {
+                console.log(response)
+              }.bind(this))
+            },
+            login_method: function (event) {
+              event.preventDefault();
+              const form_data = new FormData();
+              form_data.append("login", "teacher@teacher.com");
+              form_data.append("password", "password");
+      //        this.$store.state.user
+              axios.post('/api/login', form_data).then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                  this.$router.push('/main')
+                }
+              }.bind(this))
+            }*/
     }
   }
 </script>

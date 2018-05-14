@@ -26,11 +26,69 @@ public class TaskService {
 	}
 
 	public List<Task> getAllTasks() {
-		return taskRepository.findAll();
+		List<Task> tasks = taskRepository.findAll();
+		prepareTasks(tasks);
+		return tasks;
 	}
 
-	public List<Task> getTasksByUser(){
+	public List<Task> getTasksByUser() {
 		return null;
+	}
+
+	public Task getTaskByIdResponse(Long taskId) {
+		Task t = getTaskById(taskId);
+		if (t != null) {
+			prepareTask(t);
+		}
+		return t;
+	}
+
+	public void prepareTasks(List<Task> tasks) {
+		tasks.forEach(this::prepareTask);
+	}
+
+	private void prepareTask(final Task t) {
+		if (t.getWorkType() != null && t.getWorkType().getStages() != null) {
+			t.getWorkType().getStages().forEach(s -> {
+				s.setWorkTypes(null);
+				s.setStages(null);
+				s.setTasks(null);
+			});
+		}
+		if (t.getQuestions() != null) {
+			t.getQuestions().forEach(q -> {
+				q.setTasks(null);
+				if (q.getAnswers() != null) {
+					q.getAnswers().forEach(a -> {
+						a.setWorks(null);
+						a.setQuestions(null);
+					});
+				}
+			});
+		}
+		t.setTeacher(null);
+		if (t.getStages() != null) {
+			t.getStages().forEach(s -> {
+				s.setWorkTypes(null);
+				s.setStages(null);
+				s.setTasks(null);
+			});
+		}
+		if (t.getWorkType() != null) {
+			t.getWorkType().setTasks(null);
+		}
+		t.setWorks(null);
+		/*if (t.getWorks() != null) {
+			t.getWorks().forEach(w -> {
+				w.setTask(null);
+				w.setWorkAnswer(null);
+				w.setAnswer(null);
+				w.setStudent(null);
+				w.setNextWork(null);
+				w.setPreviousWork(null);
+				w.setWorkStages(null);
+			});
+		}*/
 	}
 
 	public Task getTaskById(Long taskId) {
@@ -50,8 +108,11 @@ public class TaskService {
 				workType = task.getWorkType();
 				break;
 		}
-		task.setWorkType(workType);
-		taskRepository.save(task);
-		return taskRepository.save(task);
+		if (workType != null) {
+			task.setWorkType(workType);
+		}
+		task = taskRepository.save(task);
+		prepareTask(task);
+		return task;
 	}
 }

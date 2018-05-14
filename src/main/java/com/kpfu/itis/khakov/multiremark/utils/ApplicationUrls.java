@@ -18,4 +18,8 @@ public class ApplicationUrls {
 	public static final String GET_TASK = API_URL + "/tasks/{taskId}";
 	public static final String GET_WORKS = API_URL + "/works";
 	public static final String GET_TASKS_NOT_COMPLETED = API_URL + "/tasks/all";
+	public static final String CREATE_STUDENT = API_URL + "/student";
+	public static final String ADD_WORK = API_URL + "/work/{id}";
+	public static final String GET_WORKS_BY_TASK = API_URL + "/works/{id}";
+	public static final String GET_WORK_BY_TASK = API_URL + "/work/{id}";
 }

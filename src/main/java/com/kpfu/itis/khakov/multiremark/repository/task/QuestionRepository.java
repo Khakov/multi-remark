@@ -11,5 +11,5 @@ import java.util.List;
  */
 @Repository
 public interface QuestionRepository extends Neo4jRepository<Question, Long> {
-	List<Question> getAll();
+	List<Question> findAll();
 }

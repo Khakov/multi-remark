@@ -40,6 +40,16 @@ public class Work {
 	@Relationship
 	private Answer answer;
 
+	private int number;
+
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
 	public WorkAnswer getWorkAnswer() {
 		return workAnswer;
 	}

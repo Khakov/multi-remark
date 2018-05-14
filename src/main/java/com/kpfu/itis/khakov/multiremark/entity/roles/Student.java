@@ -14,9 +14,6 @@ import java.util.List;
 
 @NodeEntity
 public class Student extends User{
-	/*@Id
-	@GeneratedValue
-	private Long id;*/
 
 	private String name;
 
@@ -26,13 +23,6 @@ public class Student extends User{
 	@Relationship(type = "STUDENT_TEACHER", direction = Relationship.INCOMING)
 	private List<Teacher> teachers;
 
-/*	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}*/
 
 	public String getName() {
 		return name;

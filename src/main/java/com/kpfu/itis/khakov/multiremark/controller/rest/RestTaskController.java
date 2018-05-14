@@ -50,24 +50,26 @@ public class RestTaskController {
 		} else {
 			tasks = taskService.getAllTasks();//todo
 		}*/
-		return ResponseEntity.ok(taskService.getAllTasks());
+		List<Task> tasks = taskService.getAllTasks();
+		return ResponseEntity.ok(tasks);
 	}
 
 	@GetMapping(ApplicationUrls.GET_TASK)
 	public ResponseEntity<Task> getTask(@PathVariable("taskId") Long taskId) {
-		return ResponseEntity.ok(taskService.getTaskById(taskId));
+		return ResponseEntity.ok(taskService.getTaskByIdResponse(taskId));
 	}
 
 	@GetMapping(ApplicationUrls.GET_TASKS_NOT_COMPLETED)
 	public ResponseEntity<Map<Boolean, List<Task>>> getNotCompletedTasks() {
 		Student student = (Student) SecurityUtils.getCurrentUser();
 		List<Task> tasks = workService.getWorksByStudent(student).stream().map(Work::getTask).collect(Collectors.toList());
+		taskService.prepareTasks(tasks);
 		List<Task> allTasks = taskService.getAllTasks();
 		List<Task> filteredTasks = taskService.getAllTasks().stream().filter(tasks::contains).collect(Collectors.toList());
 		allTasks.removeIf(filteredTasks::contains);
 		Map<Boolean, List<Task>> taskMap = new HashMap<>();
-		taskMap.put(true, allTasks);
-		taskMap.put(false, filteredTasks);
+		taskMap.put(false, allTasks);
+		taskMap.put(true, filteredTasks);
 		return ResponseEntity.ok(taskMap);
 	}
 }
