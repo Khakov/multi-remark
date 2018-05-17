@@ -20,6 +20,9 @@ public class Question {
 
 	private String value;
 
+	public Question() {
+	}
+
 	@Relationship(type = "QUESTION_ANSWERS")
 	private List<Answer> answers;
 

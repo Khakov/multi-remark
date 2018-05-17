@@ -32,4 +32,8 @@ public class StudentService {
 		student.setPassword(passwordEncoder.encode(student.getPassword()));
 		return studentRepository.save(student);
 	}
+
+	public Student getStudent(Long id) {
+		return studentRepository.findById(id).orElse(null);
+	}
 }

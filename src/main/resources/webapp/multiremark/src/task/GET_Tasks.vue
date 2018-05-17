@@ -1,10 +1,23 @@
 <template>
   <div id="app">
     <label>Done tasks</label><br/>
-    <li v-for="t in tasks.true"><input type="checkbox" :value="t.id">{{t.id}}<br/></li>
-    <label>not done tasks</label><br/>
-    <li v-for="t in tasks.false"><div><input type="checkbox" :value="t.id">{{t.id}}, {{t.name}},{{t.text}}, {{t.workType.type}},<br/></div>
+    <li v-for="t in tasks.true">
+      <div>
+        <input type="checkbox" :value="t.id">{{t.id}}, {{t.text}},{{t.name}}
+        <router-link :to="{ name: 'get_works', params: { id: t.id}}"> show works</router-link>
+        {{t.workType.type}},<br/>
+      </div>
     </li>
+    <label>not done tasks</label><br/>
+    <li v-for="t in tasks.false">
+      <div>
+        <input type="checkbox" :value="t.id">{{t.id}}, {{t.text}},
+        <router-link :to="{ name: 'add_work', params: { id: t.id}}">{{t.name}}</router-link>
+        {{t.workType.type}},<br/>
+      </div>
+    </li>
+    <router-view></router-view>
+
   </div>
 </template>
 

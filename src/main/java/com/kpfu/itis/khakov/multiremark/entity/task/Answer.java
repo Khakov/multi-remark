@@ -22,8 +22,11 @@ public class Answer {
 
 	private boolean isRight;
 
+	public Answer() {
+	}
+
 	@Relationship(type = "QUESTION_ANSWERS", direction =  Relationship.INCOMING)
-	private List<QuestionAnswerRelationship> questions;
+	private List<Question> questions;
 
 	@Relationship(type = "WORK_ANSWERS", direction =  Relationship.INCOMING)
 	private List<Work> works;
@@ -52,11 +55,19 @@ public class Answer {
 		isRight = right;
 	}
 
-	public List<QuestionAnswerRelationship> getQuestions() {
+	/*public List<QuestionAnswerRelationship> getQuestions() {
 		return questions;
 	}
 
 	public void setQuestions(List<QuestionAnswerRelationship> questions) {
+		this.questions = questions;
+	}*/
+
+	public List<Question> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(List<Question> questions) {
 		this.questions = questions;
 	}
 

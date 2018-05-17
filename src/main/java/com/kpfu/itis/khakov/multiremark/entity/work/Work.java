@@ -10,6 +10,7 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,8 +22,11 @@ public class Work {
 	@GeneratedValue
 	private Long id;
 
+	public Work() {
+	}
+
 	private String name;
-	@Relationship(direction = Relationship.INCOMING)
+	@Relationship(type = "STUDENT_WORK", direction = Relationship.INCOMING)
 	private Student student;
 
 	@Relationship(direction = Relationship.INCOMING)
@@ -38,7 +42,7 @@ public class Work {
 	private WorkAnswer workAnswer;
 
 	@Relationship
-	private Answer answer;
+	private List<Answer> answers;
 
 	private int number;
 
@@ -58,18 +62,27 @@ public class Work {
 		this.workAnswer = workAnswer;
 	}
 
-	public Answer getAnswer() {
-		return answer;
+	public List<Answer> getAnswers() {
+		return answers;
 	}
 
-	public void setAnswer(Answer answer) {
-		this.answer = answer;
+	public void setAnswers(List<Answer> answers) {
+		this.answers = answers;
 	}
+
 	/*	@Relationship(type = "WORK_STATUS")
 	private WorkStatus status;*/
 
 	@Relationship
 	private List<WorkStage> workStages;
+
+	public void addWorkStage(WorkStage stage) {
+		if (workStages == null) {
+			workStages = Collections.singletonList(stage);
+		} else {
+			workStages.add(stage);
+		}
+	}
 
 	private WorkState state;
 

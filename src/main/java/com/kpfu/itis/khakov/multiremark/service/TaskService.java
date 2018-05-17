@@ -2,6 +2,7 @@ package com.kpfu.itis.khakov.multiremark.service;
 
 import com.kpfu.itis.khakov.multiremark.entity.task.Task;
 import com.kpfu.itis.khakov.multiremark.entity.work.WorkType;
+import com.kpfu.itis.khakov.multiremark.repository.task.QuestionRepository;
 import com.kpfu.itis.khakov.multiremark.repository.task.TaskRepository;
 import com.kpfu.itis.khakov.multiremark.repository.work.WorkTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,15 @@ import java.util.List;
 public class TaskService {
 
 	private final TaskRepository taskRepository;
+	private final QuestionRepository questionRepository;
 
 	private final WorkTypeRepository workTypeRepository;
 
 	@Autowired
-	public TaskService(TaskRepository taskRepository, WorkTypeRepository workTypeRepository) {
+	public TaskService(TaskRepository taskRepository, WorkTypeRepository workTypeRepository, QuestionRepository questionRepository) {
 		this.taskRepository = taskRepository;
 		this.workTypeRepository = workTypeRepository;
+		this.questionRepository = questionRepository;
 	}
 
 	public List<Task> getAllTasks() {
@@ -57,6 +60,7 @@ public class TaskService {
 		}
 		if (t.getQuestions() != null) {
 			t.getQuestions().forEach(q -> {
+				q = questionRepository.findById(q.getId()).orElse(q);
 				q.setTasks(null);
 				if (q.getAnswers() != null) {
 					q.getAnswers().forEach(a -> {
@@ -82,7 +86,7 @@ public class TaskService {
 			t.getWorks().forEach(w -> {
 				w.setTask(null);
 				w.setWorkAnswer(null);
-				w.setAnswer(null);
+				w.setAnswers(null);
 				w.setStudent(null);
 				w.setNextWork(null);
 				w.setPreviousWork(null);

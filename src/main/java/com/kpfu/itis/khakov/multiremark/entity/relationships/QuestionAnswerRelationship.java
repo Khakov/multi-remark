@@ -11,7 +11,7 @@ import org.neo4j.ogm.annotation.StartNode;
 /**
  * @author Rustam Khakov
  */
-@RelationshipEntity(type = "QUESTION_ANSWERS")
+//@RelationshipEntity(type = "QUESTION_ANSWERS")
 public class QuestionAnswerRelationship {
 	@Id
 	@GeneratedValue

@@ -39,6 +39,9 @@ public class Task {
 	@Relationship(type = "QUESTION")
 	private List<Question> questions;
 
+	public Task() {
+	}
+
 	private int maxEdit;
 
 	public int getMaxEdit() {
@@ -119,5 +122,39 @@ public class Task {
 
 	public void setTeacher(Teacher teacher) {
 		this.teacher = teacher;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Task task = (Task) o;
+
+		if (maxEdit != task.maxEdit) return false;
+		if (id != null ? !id.equals(task.id) : task.id != null) return false;
+		if (name != null ? !name.equals(task.name) : task.name != null) return false;
+		if (text != null ? !text.equals(task.text) : task.text != null) return false;
+		if (teacher != null ? !teacher.equals(task.teacher) : task.teacher != null) return false;
+		if (works != null ? !works.equals(task.works) : task.works != null) return false;
+		if (standarts != null ? !standarts.equals(task.standarts) : task.standarts != null) return false;
+		if (workType != null ? !workType.equals(task.workType) : task.workType != null) return false;
+		if (stages != null ? !stages.equals(task.stages) : task.stages != null) return false;
+		return questions != null ? questions.equals(task.questions) : task.questions == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		result = 31 * result + (text != null ? text.hashCode() : 0);
+		result = 31 * result + (teacher != null ? teacher.hashCode() : 0);
+		result = 31 * result + (works != null ? works.hashCode() : 0);
+		result = 31 * result + (standarts != null ? standarts.hashCode() : 0);
+		result = 31 * result + (workType != null ? workType.hashCode() : 0);
+		result = 31 * result + (stages != null ? stages.hashCode() : 0);
+		result = 31 * result + (questions != null ? questions.hashCode() : 0);
+		result = 31 * result + maxEdit;
+		return result;
 	}
 }

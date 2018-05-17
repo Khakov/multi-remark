@@ -1,15 +1,11 @@
 <template>
   <div id="app">
-    {{work.name}}
-    <div v-for="stage in work.workStages">
-      {{stage.stageStatus}}
-      {{stage.stage.type}}
+    <div v-for="work in works">
+      <router-link :to="{name:'get_work', params: {id: work.id}}">{{work.number}} - {{work.name}}</router-link>
     </div>
-    State: {{work.state}}
-    Mark: {{work.workMark}}
+    <router-view></router-view>
   </div>
 </template>
-
 
 <script>
 
@@ -20,21 +16,20 @@
     name: 'app',
     data() {
       return {
-        work: {
+        works: [{
           answers: [],
           workAnswer: {},
-          workStages: {},
-          stage: {}
-        }
+          workStages: {}
+        }]
       }
     },
     created() {
       const id = this.$route.params.id;
-      axios.get('/api/work/' + id, null).then(function (response) {
+      axios.get('/api/works/' + id, null).then(function (response) {
           if (response.status > 400 && response.status < 404) {
             this.$router.push("/login")
           } else {
-            this.work = response.data;
+            this.works = response.data;
           }
         }.bind(this)
       )

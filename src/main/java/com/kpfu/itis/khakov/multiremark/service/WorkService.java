@@ -5,13 +5,16 @@ import com.kpfu.itis.khakov.multiremark.entity.roles.Student;
 import com.kpfu.itis.khakov.multiremark.entity.task.Answer;
 import com.kpfu.itis.khakov.multiremark.entity.task.Question;
 import com.kpfu.itis.khakov.multiremark.entity.task.Task;
+import com.kpfu.itis.khakov.multiremark.entity.work.StageStatus;
 import com.kpfu.itis.khakov.multiremark.entity.work.Work;
 import com.kpfu.itis.khakov.multiremark.entity.work.WorkAnswer;
+import com.kpfu.itis.khakov.multiremark.entity.work.WorkStage;
 import com.kpfu.itis.khakov.multiremark.repository.work.WorkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Rustam Khakov
@@ -25,12 +28,28 @@ public class WorkService {
 		this.workRepository = workRepository;
 	}
 
-	public void createWork(Student student, Task task, Answer answer, String text) {
+	public void createWork(Student student, Task task, List<Answer> answers, String text) {
 		Work work = new Work();
+		if (task.getStages() != null) {
+			task.getStages().forEach(s -> {
+				WorkStage stage = new WorkStage();
+				stage.setStageStatus(StageStatus.CREATE);
+				s.addWorkStage(stage);
+				work.addWorkStage(stage);
+			});
+		}
+		if (task.getWorkType() != null && task.getWorkType().getStages() != null) {
+			task.getWorkType().getStages().forEach(s -> {
+				WorkStage stage = new WorkStage();
+				stage.setStageStatus(StageStatus.CREATE);
+				s.addWorkStage(stage);
+				work.addWorkStage(stage);
+			});
+		}
 		work.setTask(task);
 		work.setStudent(student);
-		if (answer != null) {
-			work.setAnswer(answer);
+		if (answers != null) {
+			work.setAnswers(answers);
 		} else {
 			work.setWorkAnswer(new WorkAnswer(text));
 		}
@@ -38,7 +57,7 @@ public class WorkService {
 	}
 
 	public List<Work> getWorksByStudent(Student student) {
-		return workRepository.findAllByStudent(student);
+		return workRepository.findAll().stream().filter(w -> student.equals(w.getStudent())).collect(Collectors.toList());
 	}
 
 	public List<Work> getWorksByStudentResponse(Student student) {
@@ -48,7 +67,7 @@ public class WorkService {
 			w.setTask(null);
 			w.setPreviousWork(null);
 			w.setNextWork(null);
-			w.setAnswer(null);
+			w.setAnswers(null);
 			w.setWorkAnswer(null);
 			w.setStudent(null);
 		});
@@ -56,14 +75,12 @@ public class WorkService {
 	}
 
 	public List<Work> getWorkByTaskAndStudent(Task task, Student student) {
-		return workRepository.findAllByTaskAndStudent(task, student);
+		return workRepository.findAll().stream().filter(w -> task.equals(w.getTask()) && student.equals(w.getStudent())).collect(Collectors.toList());
 	}
 
 	public List<Work> getWorkByTaskAndStudentResponse(Task task, Student student) {
 		List<Work> works = getWorkByTaskAndStudent(task, student);
-		works.forEach(w -> {
-
-		});
+		works.forEach(this::prepareWork);
 		return works;
 	}
 
@@ -75,15 +92,15 @@ public class WorkService {
 		}
 		w.setNextWork(null);
 		w.setPreviousWork(null);
-		if (w.getAnswer() != null) {
-			w.getAnswer().setWorks(null);
-			QuestionAnswerRelationship question = w.getAnswer().getQuestions().stream().findFirst().orElse(null);
-			if (question != null) {
-				question.setAnswer(null);
-				Question q = question.getQuestion();
-				q.setTasks(null);
-				q.setAnswers(null);
-			}
+		if (w.getAnswers() != null) {
+			w.getAnswers().forEach(a -> {
+				a.setWorks(null);
+				a.getQuestions().stream().forEach(q -> {
+					q.setTasks(null);
+					q.setAnswers(null);
+				});
+			});
+
 		}
 		if (w.getWorkStages() != null) {
 			w.getWorkStages().forEach(s -> {
@@ -108,8 +125,33 @@ public class WorkService {
 	public Work getWorkByStudentAndworkIdResponse(Long id, Student student) {
 		Work work = workRepository.findById(id).orElse(null);
 		if (work != null) {
+			if (!student.equals(work.getStudent())) {
+				return null;
+			}
 			prepareWork(work);
 		}
 		return work;
+	}
+
+	public void saveWork(Work work) {
+		Task task = work.getTask();
+		if (task.getStages() != null) {
+			task.getStages().forEach(s -> {
+				WorkStage stage = new WorkStage();
+				stage.setStageStatus(StageStatus.CREATE);
+				s.addWorkStage(stage);
+				work.addWorkStage(stage);
+			});
+		}
+		if (task.getWorkType() != null && task.getWorkType().getStages() != null) {
+			task.getWorkType().getStages().forEach(s -> {
+				WorkStage stage = new WorkStage();
+				stage.setStageStatus(StageStatus.CREATE);
+				s.addWorkStage(stage);
+				work.addWorkStage(stage);
+			});
+		}
+
+		workRepository.save(work);
 	}
 }

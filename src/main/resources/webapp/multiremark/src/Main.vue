@@ -32,7 +32,7 @@
           text: "Linux vs Windows",
           answers: ['Linux', 'Windows'],
         },
-        answer: '',
+        answers: '',
       }
     },
     methods: {

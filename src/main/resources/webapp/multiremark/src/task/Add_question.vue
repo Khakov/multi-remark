@@ -37,7 +37,7 @@
           value: "Linux vs Windows",
           answers: [{value: 'Linux'}, {value: 'Windows'}],
         },
-        answer: '',
+        answers: '',
       }
     },
     methods: {

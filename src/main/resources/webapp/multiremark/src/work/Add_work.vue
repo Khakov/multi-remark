@@ -6,18 +6,20 @@
     {{task.workType.type}}
     <div v-if="task.workType.type === 'TEST'">
       <form v-on:submit="addAnswer($event)">
-        <textarea v-model="this.answerRequest.workAnswer.text"/>
-        <li v-for="question in this.task.questions">
-          {{question.text}}
-        <li v-for="ans in question.answers">
-          <input type="checkbox" :value="ans.id" @click="addNewAnswer($event)">{{ans.value}}
-        </li>
+        <textarea v-model="answerRequest.text"/>
+        <template v-for="question in task.questions">
+          {{question.value}}
+          <li v-for="ans in question.answers">
+            <input type="checkbox" :value="ans.id" @click="addNewAnswer($event, question.id)">{{ans.value}}
+          </li>
+        </template>
         <button value="Send">Submit</button>
       </form>
     </div>
     <div v-else>
       <form v-on:submit="addWork($event)">
-        <textarea v-model="this.work.workAnswer.text"/>
+        <textarea v-model="work.workAnswer.text"></textarea>
+        {{work.workAnswer.text}}
         <button value="Send">Submit</button>
       </form>
     </div>
@@ -37,7 +39,11 @@
           workAnswer: {text: ''},
           name: ''
         },
-        task: {},
+        task: {
+          name: '',
+          workType: {},
+          questions: [{answers: [],}]
+        },
         answerRequest: {
           taskId: '',
           answerIds: [],
@@ -47,7 +53,7 @@
       }
     },
     created() {
-      var id = $route.params.id;
+      const id = this.$route.params.id;
       axios.get('/api/tasks/' + id, null).then(function (response) {
           if (response.status > 400 && response.status < 404) {
             this.$router.push("/login")
@@ -59,7 +65,8 @@
     },
     methods: {
       addWork(event) {
-        var id = $route.params.id;
+        var id = this.$route.params.id;
+        console.log(this.work);
         axios.post('/api/work/' + id, this.work).then(function (response) {
           if (response.status > 400 && response.status < 404) {
             this.$router.push("/login")
@@ -69,7 +76,7 @@
         }.bind(this))
       },
       addAnswer(event) {
-        this.answerRequest.taskId = $route.params.id;
+        this.answerRequest.taskId = this.$route.params.id;
         axios.post('/api/questions/answer', this.answerRequest).then(function (response) {
           if (response.status > 400 && response.status < 404) {
             this.$router.push("/login")
@@ -78,16 +85,15 @@
           }
         }.bind(this))
       },
-      addNewAnswer(event) {
-        this.answerRequest.answerIds.push(event.target.value);
-        this.answerRequest.answerIds.splice(this.answerRequest.answerIds.indexOf(event.target.value), 1);
-        axios.post('/api/questions/answer', this.answerRequest).then(function (response) {
-          if (response.status > 400 && response.status < 404) {
-            this.$router.push("/login")
-          } else {
-            this.$router.push("/tasks")
-          }
-        }.bind(this))
+      addNewAnswer(event, question_id) {
+        if (event.target.checked) {
+          this.answerRequest.answerIds.push({answerId: event.target.value, questionId: question_id});
+        } else {
+          this.answerRequest.answerIds.splice(this.answerRequest.answerIds.indexOf({
+            answerId: event.target.value,
+            questionId: question_id
+          }), 1);
+        }
       }
     }
   }

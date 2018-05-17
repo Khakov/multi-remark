@@ -5,6 +5,8 @@ import com.kpfu.itis.khakov.multiremark.repository.task.AnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author Rustam Khakov
  */
@@ -19,5 +21,8 @@ public class AnswerService {
 
 	public Answer getAnswerById(Long id) {
 		return answerRepository.findById(id).orElse(null);
+	}
+	public List<Answer> getAnswersByIds(List<Long> ids) {
+		return answerRepository.findAllByIdIsIn(ids);
 	}
 }

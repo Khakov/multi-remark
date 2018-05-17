@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import Main from './Main.vue'
 import Work from './work/Work.vue'
+import Works from './work/Works.vue'
 import Add_Work from './work/Add_work.vue'
 import Login from './Login.vue'
 import Add_question from './task/Add_question.vue'
@@ -19,8 +20,9 @@ Vue.use(VueCookie);
 Vue.use(VueRouter);
 
 const routes = [
-  {path: '/work', component: Work},
-  {path: '/add_work/:id', component: Add_Work},
+  {path: '/work/:id', component: Work, name:'get_work'},
+  {path: '/works/:id', component: Works, name:'get_works'},
+  {path: '/add_work/:id', component: Add_Work, name:'add_work'},
   {path: '/login', component: Login},
   {path: '/main', component: Main},
   {path: '/add_question', component: Add_question},

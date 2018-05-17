@@ -3,11 +3,14 @@ package com.kpfu.itis.khakov.multiremark.entity.task;
 import com.kpfu.itis.khakov.multiremark.entity.type.StageType;
 import com.kpfu.itis.khakov.multiremark.entity.work.WorkStage;
 import com.kpfu.itis.khakov.multiremark.entity.work.WorkType;
+import com.kpfu.itis.khakov.multiremark.service.WorkService;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -46,6 +49,14 @@ public class TaskStage {
 
 	public void setStages(List<WorkStage> stages) {
 		this.stages = stages;
+	}
+
+	public void addWorkStage(WorkStage stage) {
+		if (stages == null) {
+			stages = Collections.singletonList(stage);
+		} else {
+			stages.add(stage);
+		}
 	}
 
 	public List<Task> getTasks() {

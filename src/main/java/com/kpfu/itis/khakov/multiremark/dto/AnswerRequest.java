@@ -1,12 +1,17 @@
 package com.kpfu.itis.khakov.multiremark.dto;
 
+import java.util.List;
+
 /**
  * @author Rustam Khakov
  */
 public class AnswerRequest {
 	private Long taskId;
-	private Long answerId;
+	private List<AnswerIdRequest> answerIds;
 	private String text;
+
+	public AnswerRequest() {
+	}
 
 	public String getText() {
 		return text;
@@ -24,11 +29,11 @@ public class AnswerRequest {
 		this.taskId = taskId;
 	}
 
-	public Long getAnswerId() {
-		return answerId;
+	public List<AnswerIdRequest> getAnswerIds() {
+		return answerIds;
 	}
 
-	public void setAnswerId(Long answerId) {
-		this.answerId = answerId;
+	public void setAnswerIds(List<AnswerIdRequest> answerIds) {
+		this.answerIds = answerIds;
 	}
 }

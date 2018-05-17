@@ -30,11 +30,13 @@ import java.util.stream.Collectors;
 public class RestTaskController {
 	private final TaskService taskService;
 	private final WorkService workService;
+	private final StudentService studentService;
 
 	@Autowired
-	public RestTaskController(TaskService taskService, WorkService workService) {
+	public RestTaskController(TaskService taskService, WorkService workService, StudentService studentService) {
 		this.taskService = taskService;
 		this.workService = workService;
+		this.studentService = studentService;
 	}
 
 	@PostMapping(ApplicationUrls.CREATE_TASK)
@@ -61,7 +63,7 @@ public class RestTaskController {
 
 	@GetMapping(ApplicationUrls.GET_TASKS_NOT_COMPLETED)
 	public ResponseEntity<Map<Boolean, List<Task>>> getNotCompletedTasks() {
-		Student student = (Student) SecurityUtils.getCurrentUser();
+		Student student = studentService.getStudent(SecurityUtils.getCurrentUser().getId());
 		List<Task> tasks = workService.getWorksByStudent(student).stream().map(Work::getTask).collect(Collectors.toList());
 		taskService.prepareTasks(tasks);
 		List<Task> allTasks = taskService.getAllTasks();

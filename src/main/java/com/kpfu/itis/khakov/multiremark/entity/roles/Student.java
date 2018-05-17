@@ -13,12 +13,15 @@ import java.util.List;
  */
 
 @NodeEntity
-public class Student extends User{
+public class Student extends User {
 
 	private String name;
 
-	@Relationship
-	private List<Work> works;
+	public Student() {
+	}
+
+/*	@Relationship(type ="STUDENT_WORK", direction = Relationship.OUTGOING)
+	private List<Work> works;*/
 
 	@Relationship(type = "STUDENT_TEACHER", direction = Relationship.INCOMING)
 	private List<Teacher> teachers;
@@ -32,13 +35,13 @@ public class Student extends User{
 		this.name = name;
 	}
 
-	public List<Work> getWorks() {
+/*	public List<Work> getWorks() {
 		return works;
 	}
 
 	public void setWorks(List<Work> works) {
 		this.works = works;
-	}
+	}*/
 
 	/*public List<Course> getCourses() {
 		return courses;
@@ -54,5 +57,23 @@ public class Student extends User{
 
 	public void setTeachers(List<Teacher> teachers) {
 		this.teachers = teachers;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Student student = (Student) o;
+
+		if (name != null ? !name.equals(student.name) : student.name != null) return false;
+		return teachers != null ? teachers.equals(student.teachers) : student.teachers == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = name != null ? name.hashCode() : 0;
+		result = 31 * result + (teachers != null ? teachers.hashCode() : 0);
+		return result;
 	}
 }
