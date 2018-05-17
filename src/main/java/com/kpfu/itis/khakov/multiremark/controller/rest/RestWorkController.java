@@ -6,7 +6,9 @@ import com.kpfu.itis.khakov.multiremark.entity.roles.Student;
 import com.kpfu.itis.khakov.multiremark.entity.states.WorkState;
 import com.kpfu.itis.khakov.multiremark.entity.task.Answer;
 import com.kpfu.itis.khakov.multiremark.entity.task.Task;
+import com.kpfu.itis.khakov.multiremark.entity.type.TaskType;
 import com.kpfu.itis.khakov.multiremark.entity.work.Work;
+import com.kpfu.itis.khakov.multiremark.entity.work.WorkType;
 import com.kpfu.itis.khakov.multiremark.service.AnswerService;
 import com.kpfu.itis.khakov.multiremark.service.StudentService;
 import com.kpfu.itis.khakov.multiremark.service.TaskService;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

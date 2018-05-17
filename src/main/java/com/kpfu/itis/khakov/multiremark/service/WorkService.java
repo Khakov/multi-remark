@@ -86,7 +86,15 @@ public class WorkService {
 
 	private void prepareWork(Work w) {
 		w.setStudent(null);
-		w.setTask(null);
+		if (w.getTask() != null) {
+			final Task task = w.getTask();
+			task.setWorks(null);
+			task.setTeacher(null);
+			task.setQuestions(null);
+			task.setWorkType(null);
+			task.setStages(null);
+			task.setStandarts(null);
+		}
 		if (w.getWorkAnswer() != null) {
 			w.getWorkAnswer().setWork(null);
 		}
@@ -153,5 +161,17 @@ public class WorkService {
 		}
 
 		workRepository.save(work);
+	}
+
+	public Work getWorkById(Long workId) {
+		return workRepository.findById(workId).orElse(null);
+	}
+
+	public Work getWorkByIdResponse(Long workId) {
+		Work work = workRepository.findById(workId).orElse(null);
+		if (work != null) {
+			prepareWork(work);
+		}
+		return work;
 	}
 }

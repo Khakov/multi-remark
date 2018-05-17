@@ -22,4 +22,8 @@ public class ApplicationUrls {
 	public static final String ADD_WORK = API_URL + "/work/{id}";
 	public static final String GET_WORKS_BY_TASK = API_URL + "/works/{id}";
 	public static final String GET_WORK_BY_TASK = API_URL + "/work/{id}";
+	public static final String CREATE_COMMENT = API_URL + "/comment/{reviewId}";
+	public static final String CREATE_REVIEW = API_URL + "/review/{workId}";
+	public static final String GET_WORK_STAGES = API_URL + "/stages/{workId}";
+	public static final String GET_WORK_CODE = API_URL + "/code/{workId}";
 }

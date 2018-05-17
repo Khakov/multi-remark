@@ -1,3 +1,5 @@
+import 'bootstrap/dist/css/bootstrap.min.css'
+
 import Vue from 'vue'
 import App from './App.vue'
 import Main from './Main.vue'
@@ -9,6 +11,8 @@ import Add_question from './task/Add_question.vue'
 import Add_Task from './task/Add_Task.vue'
 import Add_Student from './Add_Student.vue'
 import Get_Tasks from './task/GET_Tasks.vue'
+import Stages from './stages/Stages.vue'
+import Stage from './stages/Stage.vue'
 
 
 import VueRouter from 'vue-router'
@@ -22,6 +26,8 @@ Vue.use(VueRouter);
 const routes = [
   {path: '/work/:id', component: Work, name:'get_work'},
   {path: '/works/:id', component: Works, name:'get_works'},
+  {path: '/stage/:id', component: Stage, name:'get_stage'},
+  {path: '/stages/:id', component: Stages, name:'get_stages'},
   {path: '/add_work/:id', component: Add_Work, name:'add_work'},
   {path: '/login', component: Login},
   {path: '/main', component: Main},
