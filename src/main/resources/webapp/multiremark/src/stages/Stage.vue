@@ -1,15 +1,20 @@
 <template>
   <div id="app">
-    <table>
-      <tr v-for="(line, index) in code">
+    <table class="table table-hover table-borderless">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Code</th>
+        <th scope="col">Comment</th>
+      </tr>
+      </thead>
+      <tr v-for="(line, index) in code" scope="row">
         <td>{{index + 1}}</td>
         <td>{{line.text}}</td>
-        <td>
-          <button @click="saveComment(index)" v-if="editingLine == index">Save</button>
-          <button @click="editComment(index)" v-else>Edit</button>
-        </td>
         <td style="position: relative">
-          <textarea v-model="line.comment" :disabled="editingLine != index" class="comment-disabled" :class="{'comment-editing': index == editingLine}"></textarea>
+        <button type="button" class="btn btn-sm btn-success" @click="saveComment(index)" v-if="editingLine == index">Save</button>
+        <button type="button" class="btn btn-sm btn-success" @click="editComment(index)" v-else>Edit</button>
+        <textarea v-model="line.comment" :disabled="editingLine != index" class="comment-disabled form-control" :class="{'comment-editing': index == editingLine}"></textarea>
         </td>
 
       </tr>

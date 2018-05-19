@@ -7,6 +7,8 @@ import com.kpfu.itis.khakov.multiremark.service.TaskService;
 import com.kpfu.itis.khakov.multiremark.utils.ApplicationUrls;
 import com.kpfu.itis.khakov.multiremark.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +33,7 @@ public class RestMainController {
 		User user = SecurityUtils.getCurrentUser();
 		Role role = SecurityUtils.getUserAuthtority(user);
 		modelMap.addAttribute("user", user);
-			modelMap.addAttribute("tasks", taskService.getAllTasks());
+		modelMap.addAttribute("tasks", taskService.getAllTasks());
 		if (role == Role.ROLE_STUDENT) {
 			return "student_page";
 		} else {
@@ -39,4 +41,16 @@ public class RestMainController {
 			return "teacher_page";
 		}
 	}
+
+	@GetMapping(ApplicationUrls.GET_USER)
+	public ResponseEntity<User> getUser() {
+		try {
+			User user = SecurityUtils.getCurrentUser();
+			user.setPassword(null);
+			return ResponseEntity.ok(user);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+	}
+
 }

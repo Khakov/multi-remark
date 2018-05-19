@@ -1,12 +1,15 @@
 <template>
   <div id="app">
-    {{work.name}}
-    <div v-for="stage in work.workStages">
-      {{stage.stageStatus}}
-      {{stage.stage.type}}
-    </div>
-    State: {{work.state}}
-    Mark: {{work.workMark}}
+    {{work.name}}<br/>
+    <h3>State:</h3> {{work.state}}<br/>
+    <h3>Mark:</h3> {{work.workMark}}<br/>
+    <h3>Stages:</h3><br/>
+    <table>
+      <tr v-for="stage in work.workStages">
+        <td>{{stage.stageStatus}}</td>
+        <td>{{stage.stage.type}}</td>
+      </tr>
+    </table>
   </div>
 </template>
 

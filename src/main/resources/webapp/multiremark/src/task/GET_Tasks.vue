@@ -1,21 +1,89 @@
 <template>
   <div id="app">
-    <label>Done tasks</label><br/>
-    <li v-for="t in tasks.true">
-      <div>
-        <input type="checkbox" :value="t.id">{{t.id}}, {{t.text}},{{t.name}}
-        <router-link :to="{ name: 'get_works', params: { id: t.id}}"> show works</router-link>
-        {{t.workType.type}},<br/>
-      </div>
-    </li>
-    <label>not done tasks</label><br/>
-    <li v-for="t in tasks.false">
-      <div>
-        <input type="checkbox" :value="t.id">{{t.id}}, {{t.text}},
-        <router-link :to="{ name: 'add_work', params: { id: t.id}}">{{t.name}}</router-link>
-        {{t.workType.type}},<br/>
-      </div>
-    </li>
+    <div v-if="this.$store.state.user.role === 'ROLE_STUDENT'">
+      <h3 class="h3">Done tasks</h3><br/>
+      <table class="table">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Type</th>
+          <th scope="col">More</th>
+        </tr>
+        </thead>
+        <tr v-for="t in tasks.true">
+          <td>
+            {{t.id}}
+          </td>
+          <td>
+            {{t.name}}
+          </td>
+          <td>
+            {{t.workType.type}}
+          </td>
+          <td>
+            <router-link :to="{ name: 'get_works', params: { id: t.id}}">
+              <button class="btn-success btn-sm">show works</button>
+            </router-link>
+          </td>
+        </tr>
+      </table>
+    <h3 class="h3">Not done tasks</h3><br/>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Type</th>
+        <th scope="col">More</th>
+      </tr>
+      </thead>
+      <tr v-for="t in tasks.false">
+        <td>
+          {{t.id}}
+        </td>
+        <td>
+          {{t.name}}
+        </td>
+        <td>
+          {{t.workType.type}}
+        </td>
+        <td>
+          <router-link :to="{ name: 'add_work', params: { id: t.id}}">
+            <button class="btn-success btn-sm">Do task</button>
+          </router-link>
+        </td>
+      </tr>
+    </table>
+    </div>
+    <div v-else>
+      <table class="table">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Type</th>
+          <th scope="col">More</th>
+        </tr>
+        </thead>
+        <tr v-for="t in tasks.false">
+          <td>
+            {{t.id}}
+          </td>
+          <td>
+            {{t.name}}
+          </td>
+          <td>
+            {{t.workType.type}}
+          </td>
+          <td>
+            <router-link :to="{ name: 'get_task', params: { id: t.id}}">
+              <button class="btn-success btn-sm">Show task</button>
+            </router-link>
+          </td>
+        </tr>
+      </table>
+    </div>
     <router-view></router-view>
 
   </div>

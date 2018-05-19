@@ -1,9 +1,7 @@
 package com.kpfu.itis.khakov.multiremark.service;
 
-import com.kpfu.itis.khakov.multiremark.entity.relationships.QuestionAnswerRelationship;
 import com.kpfu.itis.khakov.multiremark.entity.roles.Student;
 import com.kpfu.itis.khakov.multiremark.entity.task.Answer;
-import com.kpfu.itis.khakov.multiremark.entity.task.Question;
 import com.kpfu.itis.khakov.multiremark.entity.task.Task;
 import com.kpfu.itis.khakov.multiremark.entity.work.StageStatus;
 import com.kpfu.itis.khakov.multiremark.entity.work.Work;

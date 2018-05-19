@@ -1,10 +1,12 @@
 <template>
-  <div id="app">
+  <div id="app" class="w-75" style="padding-left: 25%">
     <form v-on:submit="addStudent($event)">
-      <input v-model="student.name" placeholder="name">
-      <input v-model="student.email" placeholder="email">
-      <input v-model="student.password" type="password" placeholder="password">
-      <button type="submit">send</button>
+      <input v-model="student.name" placeholder="name" class="form-control"><br>
+      <input v-model="student.email" placeholder="email" class="form-control"><br>
+      <input v-model="student.password" type="password" placeholder="password" class="form-control"><br>
+      <input v-model="student.password" type="password" placeholder="confirm password" class="form-control"><br>
+
+      <button type="submit" class="btn btn-primary">add student</button>
     </form>
   </div>
 </template>

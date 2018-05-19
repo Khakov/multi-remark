@@ -1,16 +1,20 @@
 <template>
-  <div id="app">
+  <div id="app" class="w-75" style="padding-left: 25%">
     <form v-on:submit="addQuestion($event)">
-      <input type="text" v-model="this.question.text"/>
-      <select v-model="question.type">
-        <option value="SIMPLE" selected>choice question</option>
-        <option value="TEXT">text question</option>
+      <input type="text" class="form-control" v-model="question.value" placeholder="add question"/> <br>
+      <select v-model="question.type" class="custom-select">
+        <option value="SIMPLE" selected class="dropdown-item">choice question</option>
+        <option value="TEXT" class="dropdown-item">text question</option>
       </select>
       <div v-if="question.type === 'SIMPLE'">
-        <li v-for="ans in question.answers"><input type="checkbox" :value="ans.value">{{ans.value}}</li>
-        <input type="text" @keyup.enter="addAnswer($event)"/>
+        <div v-for="(ans, index) in question.answers">
+          <input class="form-check-input" type="checkbox"
+                 :value="ans.id" @click="addAnswerRight($event, index)">{{ans.value}}
+        </div>
+        <input class="form-control" type="text" placeholder="add answer" @keyup.enter="addAnswer($event)"/>
       </div>
-      <button value="Send">Submit</button>
+      <br>
+      <button value="Send" type="submit" class="btn btn-primary">Add question</button>
     </form>
   </div>
 </template>
@@ -27,32 +31,32 @@
     name: 'app',
     data() {
       return {
-        info: {
-          login: "",
-          password: ""
-        },
-        msg: 'Welcome to Your Vue.js App',
         question: {
           type: "SIMPLE",
           value: "Linux vs Windows",
-          answers: [{value: 'Linux'}, {value: 'Windows'}],
+          answers: [{value: 'Linux', right: false}, {value: 'Windows', right: false}],
         },
         answers: '',
       }
     },
     methods: {
       addAnswer(event) {
-        this.question.answers.push({value: event.target.value});
-        /*axios.get('/main', null).then(function (response) {
-          if (response.status > 400) {
-            this.$router.push("/login")
-          }
-        }.bind(this))*/
+        this.question.answers.push({value: event.target.value, right: false});
       },
       addQuestion(event) {
-        axios.post('/api/questions/107', this.question).then(function (response) {
+        const id = this.$route.params.id;
+        axios.post('/api/questions/' + id, this.question).then(function (response) {
+          this.$router.push("/tasks/"+ id);
           console.log(response)
         }.bind(this))
+      },
+      addAnswerRight(event, ans) {
+        if (event.target.checked) {
+          this.question.answers[ans].right = true;
+          console.log(ans);
+        } else {
+          this.question.answers[ans].right = false;
+        }
       }
     }
   }

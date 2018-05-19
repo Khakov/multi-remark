@@ -1,18 +1,18 @@
 <template>
-  <div id="app">
-    <div id="app">
-      <form v-on:submit="addTask($event)">
-        <select v-model="task.workType.type">
-          <option value="TEST" selected>TEST</option>
-          <option value="TEXT">TEXT</option>
-          <option value="PROJECT">PROJECT</option>
-          <option value="CODE">CODE</option>
-        </select>
-        <input v-model="task.name" placeholder="name">
-        <input v-model="task.text" placeholder="text">
-        <button type="submit">send</button>
-      </form>
-    </div>
+  <div id="app" class="w-75" style="padding-left: 25%">
+    <form v-on:submit="addTask($event)">
+      <input v-model="task.name" placeholder="name" class="form-control"><br/>
+      <textarea v-model="task.text" placeholder="text" class="form-control"></textarea><br/>
+      <label class="col-form-label">Task type</label>
+      <select v-model="task.workType.type" class="custom-select">
+        <option value="TEST" selected class="dropdown-item">TEST</option>
+        <option value="TEXT" class="dropdown-item">TEXT</option>
+        <option value="PROJECT" class="dropdown-item">PROJECT</option>
+        <option value="CODE" class="dropdown-item">CODE</option><br/>
+      </select><br/>
+      <button value="Send" type="button" class="btn btn-primary">Add task</button>
+      <br/>
+    </form>
   </div>
 </template>
 

@@ -39,6 +39,9 @@ public class Task {
 	@Relationship(type = "QUESTION")
 	private List<Question> questions;
 
+	@Relationship(type = "TESTS")
+	private List<TestCase> tests;
+
 	public Task() {
 	}
 
@@ -122,6 +125,14 @@ public class Task {
 
 	public void setTeacher(Teacher teacher) {
 		this.teacher = teacher;
+	}
+
+	public List<TestCase> getTests() {
+		return tests;
+	}
+
+	public void setTests(List<TestCase> tests) {
+		this.tests = tests;
 	}
 
 	@Override

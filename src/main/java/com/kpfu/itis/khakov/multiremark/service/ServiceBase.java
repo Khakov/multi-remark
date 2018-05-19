@@ -3,10 +3,10 @@ package com.kpfu.itis.khakov.multiremark.service;
 /**
  * @author Rustam Khakov
  */
-public interface AbstractService<T> {
+public interface ServiceBase<T, L> {
 	T save(T t);
 
-	T get(T t);
+	T get(L id);
 
-	T delete(T t);
+	void delete(T t);
 }

@@ -43,37 +43,7 @@
       )
     },
     methods: {
-      addWork(event) {
-        var id = this.$route.params.id;
-        console.log(this.work);
-        axios.post('/api/work/' + id, this.work).then(function (response) {
-          if (response.status > 400 && response.status < 404) {
-            this.$router.push("/login")
-          } else {
-            this.$router.push("/tasks")
-          }
-        }.bind(this))
-      },
-      addAnswer(event) {
-        this.answerRequest.taskId = this.$route.params.id;
-        axios.post('/api/questions/answer', this.answerRequest).then(function (response) {
-          if (response.status > 400 && response.status < 404) {
-            this.$router.push("/login")
-          } else {
-            this.$router.push("/tasks")
-          }
-        }.bind(this))
-      },
-      addNewAnswer(event, question_id) {
-        if (event.target.checked) {
-          this.answerRequest.answerIds.push({answerId: event.target.value, questionId: question_id});
-        } else {
-          this.answerRequest.answerIds.splice(this.answerRequest.answerIds.indexOf({
-            answerId: event.target.value,
-            questionId: question_id
-          }), 1);
-        }
-      }
+
     }
   }
 </script>

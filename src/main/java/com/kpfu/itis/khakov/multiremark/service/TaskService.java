@@ -81,6 +81,9 @@ public class TaskService {
 		if (t.getWorkType() != null) {
 			t.getWorkType().setTasks(null);
 		}
+		if (t.getTests() != null) {
+			t.getTests().forEach(test -> test.setTask(null));
+		}
 		t.setWorks(null);
 		/*if (t.getWorks() != null) {
 			t.getWorks().forEach(w -> {

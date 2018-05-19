@@ -1,26 +1,25 @@
 <template>
-  <div id="app">
+  <div id="app" class="w-75" style="padding-left: 25%">
     {{task.name}}
     <br>
-    {{task.text}}
+    {{task.text}}<br>
     {{task.workType.type}}
     <div v-if="task.workType.type === 'TEST'">
       <form v-on:submit="addAnswer($event)">
-        <textarea v-model="answerRequest.text"/>
+        <textarea v-model="answerRequest.text" class="form-control"/>
         <template v-for="question in task.questions">
           {{question.value}}
-          <li v-for="ans in question.answers">
-            <input type="checkbox" :value="ans.id" @click="addNewAnswer($event, question.id)">{{ans.value}}
-          </li>
+          <div v-for="ans in question.answers">
+            <input type="checkbox" class="form-check-input" :value="ans.id" @click="addNewAnswer($event, question.id)">{{ans.value}}
+          </div>
         </template>
-        <button value="Send">Submit</button>
+        <button value="Send" type="button" class="btn btn-primary">Add work</button>
       </form>
     </div>
     <div v-else>
       <form v-on:submit="addWork($event)">
-        <textarea v-model="work.workAnswer.text"></textarea>
-        {{work.workAnswer.text}}
-        <button value="Send">Submit</button>
+        <textarea v-model="work.workAnswer.text" class="form-control"></textarea>
+        <button value="Send" type="button" class="btn btn-primary">Add work</button>
       </form>
     </div>
   </div>

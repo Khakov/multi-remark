@@ -1,9 +1,9 @@
 <template>
-  <div id="app">
+  <div id="app" class="w-75" style="padding-left: 25%">
     <form v-on:submit="login_method($event)">
-      <input v-model="info.login" placeholder="Login">
-      <input v-model="info.password" placeholder="password" type="password">
-      <button type="submit">send</button>
+      <input v-model="info.login" placeholder="Login" class="form-control" >
+      <input v-model="info.password" placeholder="password" type="password" class="form-control" >
+      <button type="submit"  class="btn btn-primary">login</button>
     </form>
     <!--<input type="text" @keyup.enter="addAnswer($event)">-->
   </div>
