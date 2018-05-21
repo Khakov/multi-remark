@@ -4,9 +4,12 @@ package com.kpfu.itis.khakov.multiremark.dto.work;
  * @author Rustam Khakov
  */
 public class CommentRequest {
-	String comment;
-	int line;
-	Long id;
+	private String comment;
+	private int line;
+	private Long id;
+
+	public CommentRequest() {
+	}
 
 	public Long getId() {
 		return id;

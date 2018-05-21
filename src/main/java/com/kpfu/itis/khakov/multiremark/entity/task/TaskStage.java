@@ -26,6 +26,16 @@ public class TaskStage {
 
 	private StageType type;
 
+	private String input;
+
+	public String getInput() {
+		return input;
+	}
+
+	public void setInput(String input) {
+		this.input = input;
+	}
+
 	@Relationship(type = "WORK_STAGES", direction = Relationship.OUTGOING)
 	private List<WorkStage> stages;
 

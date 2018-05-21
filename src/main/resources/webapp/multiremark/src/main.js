@@ -5,15 +5,21 @@ import App from './App.vue'
 import Main from './Main.vue'
 import Work from './work/Work.vue'
 import Works from './work/Works.vue'
-import Add_Work from './work/Add_work.vue'
 import Login from './Login.vue'
+
+import Add_Work from './work/Add_work.vue'
 import Add_question from './task/Add_question.vue'
 import Add_Task from './task/Add_Task.vue'
+import Add_Test from './task/Add_test.vue'
+import Add_Standart from './task/Add_standart.vue'
 import Add_Student from './Add_Student.vue'
+
 import Get_Tasks from './task/GET_Tasks.vue'
 import Get_Task from './task/GET_Task.vue'
 import Stages from './stages/Stages.vue'
 import Stage from './stages/Stage.vue'
+import Get_Test from './task/GET_Test.vue'
+import Get_Standart from './task/GET_standart.vue'
 
 
 import VueRouter from 'vue-router'
@@ -37,15 +43,17 @@ const routes = [
   {path: '/stage/:id', component: Stage, name: 'get_stage'},
   {path: '/stages/:id', component: Stages, name: 'get_stages'},
   {path: '/add_work/:id', component: Add_Work, name: 'add_work'},
+  {path: '/add_test/:id', component: Add_Test, name: 'add_test'},
+  {path: '/add_standart/:id', component: Add_Standart, name: 'add_standart'},
   {path: '/login', component: Login},
   {path: '/main', component: Main},
   {path: '/add_question/:id', component: Add_question, name: 'add_question'},
   {path: '/add_task', component: Add_Task},
   {path: '/add_student', component: Add_Student},
   {path: '/tasks', component: Get_Tasks},
-  {path: '/tasks/:id', component: Get_Task, name: 'get_task'}
-
-
+  {path: '/tasks/:id', component: Get_Task, name: 'get_task'},
+  {path: '/tests/:id', component: Get_Test, name: 'get_test'},
+  {path: '/standarts/:id', component: Get_Standart, name: 'get_standart'}
 ];
 const router = new VueRouter({
   routes // сокращение от `routes: routes`

@@ -12,13 +12,25 @@
         <td>{{index + 1}}</td>
         <td>{{line.text}}</td>
         <td style="position: relative">
-        <button type="button" class="btn btn-sm btn-success" @click="saveComment(index)" v-if="editingLine == index">Save</button>
-        <button type="button" class="btn btn-sm btn-success" @click="editComment(index)" v-else>Edit</button>
-        <textarea v-model="line.comment" :disabled="editingLine != index" class="comment-disabled form-control" :class="{'comment-editing': index == editingLine}"></textarea>
+          <div v-if="edit">
+            <button class="btn btn-sm btn-success" @click="saveComment(index)"
+                    v-if="editingLine == index">
+              Save
+            </button>
+            <button class="btn btn-sm btn-success" @click="editComment(index)" v-else>Edit</button>
+            <textarea v-model="line.comment.comment" :disabled="editingLine != index"
+                      class="comment-disabled form-control"
+                      :class="{'comment-editing': index == editingLine}"></textarea>
+          </div>
+          <div v-else>
+            {{line.comment}}
+          </div>
         </td>
-
       </tr>
     </table>
+    <div v-if="edit">
+      <button class="btn btn-sm btn-success" @click="reviewDone()">Add review</button>
+    </div>
 
   </div>
 </template>
@@ -32,12 +44,17 @@
     name: 'app',
     data() {
       return {
-        code: [{text: "lol", comment: "lol"}, {text: "lol", comment: ""}, {text: "lol", comment: "lol"}],
+        code: [{text: "lol", comment: {comment: "lol", id: 1}}, {text: "lol", comment: ""}, {
+          text: "lol",
+          comment: "lol"
+        }],
         work: {
           workAnswer: {text: ''},
           name: '',
           task: {}
         },
+        review: {},
+        edit: false,
         stage: {
           id: '',
           review: {comments: [{}]},
@@ -52,69 +69,71 @@
       }
     },
     created() {
-//      const id = this.$route.params.id;
-//      axios.get('/api/stage/' + id, null).then(function (response) {
-//        if (response.status > 400 && response.status < 404) {
-//          this.$router.push("/login")
-//        } else {
-//          this.stage = response.data;
-//        }
-//      }.bind(this)),
-//        axios.get('/api/code/' + id, null).then(function (response) {
-//          if (response.status > 400 && response.status < 404) {
-//            this.$router.push("/login")
-//          } else {
-//            this.code = response.data;
-//          }
-//        }.bind(this))
+      const id = this.$route.params.id;
+      axios.get('/api/stage/' + id, null).then(function (response) {
+        this.stage = response.data;
+      }.bind(this)),
+        axios.get('/api/stage-edit/' + id, null).then(function (response) {
+          this.edit = response.data;
+        }.bind(this)),
+        axios.get('/api/code/' + id, null).then(function (response) {
+          this.code = response.data;
+        }.bind(this)),
+        axios.get('/api/review/' + id, null).then(function (response) {
+          this.review = response.data;
+          console.log(response.data);
+          if (this.review.id === 0 && this.edit) {
+            axios.post('/api/review/' + id, null).then(function (response) {
+              this.review = response.data;
+            })
+          }
+        }.bind(this)).error(function (e) {
+          if (this.review === null && this.edit) {
+            axios.post('/api/review/' + id, null).then(function (response) {
+              this.review = response.data;
+            })
+          }
+        });
 
     },
     methods: {
-      addWork(event) {
-        var id = this.$route.params.id;
-        console.log(this.work);
-        axios.post('/api/work/' + id, this.work).then(function (response) {
-          if (response.status > 400 && response.status < 404) {
-            this.$router.push("/login")
-          } else {
-            this.$router.push("/tasks")
-          }
-        }.bind(this))
-      },
-      addAnswer(event) {
-        this.answerRequest.taskId = this.$route.params.id;
-        axios.post('/api/questions/answer', this.answerRequest).then(function (response) {
-          if (response.status > 400 && response.status < 404) {
-            this.$router.push("/login")
-          } else {
-            this.$router.push("/tasks")
-          }
-        }.bind(this))
-      },
-      addNewAnswer(event, question_id) {
-        if (event.target.checked) {
-          this.answerRequest.answerIds.push({answerId: event.target.value, questionId: question_id});
-        } else {
-          this.answerRequest.answerIds.splice(this.answerRequest.answerIds.indexOf({
-            answerId: event.target.value,
-            questionId: question_id
-          }), 1);
-        }
-      },
-      editComment(index){
+      editComment(index) {
         this.editingLine = index;
       },
-      saveComment(index){
+      saveComment(index) {
+        let com = this.code[index].comment;
+        let req = {
+          comment: com.comment,
+          line: index,
+          id: com.id
+        };
+        if (com.id === null) {
+          req = {
+            comment: com.comment,
+            line: index
+          };
+        }
+        console.log(this.review);
+        console.log(this.review.id);
+        axios.post('/api/comment/' + this.review.id, req).then(function (response) {
+          this.code[index].comment.id = response.data;
+        }.bind(this));
         this.editingLine = null;
+      },
+      reviewDone() {
+        let id = this.review.id;
+        axios.post('/api/review-done/' + id, null).then(function (response) {
+          this.$router.push("/tasks")
+        }.bind(this))
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .comment-disabled{
+  .comment-disabled {
     position: absolute;
-    top:0;
+    top: 0;
     left: 0;
     height: 2em;
     resize: none;
@@ -122,7 +141,8 @@
     transition: all 2s ease-in-out;
 
   }
-  .comment-editing{
+
+  .comment-editing {
 
     width: 200px;
     height: 100px;

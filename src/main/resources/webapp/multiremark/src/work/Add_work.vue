@@ -13,13 +13,13 @@
             <input type="checkbox" class="form-check-input" :value="ans.id" @click="addNewAnswer($event, question.id)">{{ans.value}}
           </div>
         </template>
-        <button value="Send" type="button" class="btn btn-primary">Add work</button>
+        <button value="Send" type="submit" class="btn btn-primary">Add work</button>
       </form>
     </div>
     <div v-else>
       <form v-on:submit="addWork($event)">
         <textarea v-model="work.workAnswer.text" class="form-control"></textarea>
-        <button value="Send" type="button" class="btn btn-primary">Add work</button>
+        <button value="Send" type="submit" class="btn btn-primary">Add work</button>
       </form>
     </div>
   </div>

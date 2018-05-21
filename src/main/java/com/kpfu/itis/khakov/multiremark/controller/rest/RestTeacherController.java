@@ -8,6 +8,7 @@ import com.kpfu.itis.khakov.multiremark.entity.roles.User;
 import com.kpfu.itis.khakov.multiremark.entity.type.StageType;
 import com.kpfu.itis.khakov.multiremark.entity.work.Comment;
 import com.kpfu.itis.khakov.multiremark.entity.work.Review;
+import com.kpfu.itis.khakov.multiremark.entity.work.StageStatus;
 import com.kpfu.itis.khakov.multiremark.entity.work.Work;
 import com.kpfu.itis.khakov.multiremark.entity.work.WorkStage;
 import com.kpfu.itis.khakov.multiremark.service.CommentService;
@@ -53,14 +54,16 @@ public class RestTeacherController {
 	@PostMapping(ApplicationUrls.CREATE_COMMENT)
 	public ResponseEntity<Long> addComment(@RequestBody CommentRequest commentRequest, @PathVariable Long reviewId) {
 		Review review = reviewService.getReviewById(reviewId);
-		Long id = null;
+		Long id = 0L;
 		if (review != null) {
 			Comment comment = null;
 			if (commentRequest != null && commentRequest.getId() != null) {
 				comment = commentService.get(commentRequest.getId());
+				comment.setReview(review);
 			}
 			if (comment == null) {
 				comment = new Comment();
+				comment.setReview(review);
 			}
 			comment.setBeginString(commentRequest.getLine());
 			comment.setComment(commentRequest.getComment());
@@ -70,14 +73,14 @@ public class RestTeacherController {
 	}
 
 	@PostMapping(ApplicationUrls.CREATE_REVIEW)
-	public ResponseEntity<Long> addReview(@RequestBody CommentRequest comment, @PathVariable Long workId) {
-		Long id = null;
+	public ResponseEntity<Review> addReview(@PathVariable Long workId) {
+		Review review = new Review();
 		WorkStage stage = workStageService.getStageById(workId);
 		if (stage != null && StageType.isReviewStage(stage.getStage().getType())) {
 			User user = SecurityUtils.getCurrentUser();
 			Student student = null;
 			Teacher teacher = null;
-			Review review = new Review();
+
 			if (user.getRole() == Role.ROLE_STUDENT) {
 				student = studentService.getStudent(user.getId());
 				review.setStudent(student);
@@ -85,14 +88,37 @@ public class RestTeacherController {
 				teacher = teacherService.getTeacherById(user.getId());
 				review.setTeacher(teacher);
 			}
-			id = reviewService.addReview(review).getId();
+			stage.setStageStatus(StageStatus.IN_PROCESS);
+			review.setWorkStage(stage);
+			review = reviewService.addReview(review);
+			review.setStudent(null);
+			review.setWorkStage(null);
+			review.setTeacher(null);
+			review.setStudent(null);
+			List<Comment> comments = review.getComments();
+			if (comments != null) {
+				comments.forEach(c -> c.setReview(null));
+			}
+		}
+		return ResponseEntity.ok(review);
+	}
+
+	@PostMapping(ApplicationUrls.REVIEW_DONE)
+	public ResponseEntity<Long> review(@PathVariable Long id) {
+		Review review = reviewService.getReviewById(id);
+		if (review != null) {
+			review.setReviewStatus("Done");
+			review.getWorkStage().setStageStatus(StageStatus.DONE);
+			workStageService.save(review.getWorkStage());
+			reviewService.save(review);
 		}
 		return ResponseEntity.ok(id);
 	}
 
 	@GetMapping(ApplicationUrls.CREATE_REVIEW)
 	public ResponseEntity<Review> getReview(@PathVariable Long workId) {
-		Review review = null;
+		Review review = new Review();
+		review.setId(0L);
 		WorkStage stage = workStageService.getStageById(workId);
 		if (stage != null) {
 			stage.setWork(null);
@@ -106,6 +132,9 @@ public class RestTeacherController {
 				if (comments != null) {
 					comments.forEach(c -> c.setReview(null));
 				}
+			} else {
+				review = new Review();
+				review.setId(0L);
 			}
 		}
 		return ResponseEntity.ok(review);

@@ -18,6 +18,9 @@ public class TestCase {
 
 	private String text;
 
+	@Relationship(type = "TESTS", direction = Relationship.INCOMING)
+	private Task task;
+
 	public Task getTask() {
 		return task;
 	}
@@ -25,9 +28,6 @@ public class TestCase {
 	public void setTask(Task task) {
 		this.task = task;
 	}
-
-	@Relationship(type = "TESTS", direction = Relationship.INCOMING)
-	private Task task;
 
 	public Long getId() {
 		return id;

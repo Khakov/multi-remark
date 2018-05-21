@@ -1,18 +1,25 @@
 package com.kpfu.itis.khakov.multiremark.controller.rest;
 
+import com.kpfu.itis.khakov.multiremark.common.work.MockWorkRunner;
+import com.kpfu.itis.khakov.multiremark.common.work.WorkRunner;
 import com.kpfu.itis.khakov.multiremark.dto.AnswerIdRequest;
 import com.kpfu.itis.khakov.multiremark.dto.AnswerRequest;
 import com.kpfu.itis.khakov.multiremark.entity.roles.Student;
 import com.kpfu.itis.khakov.multiremark.entity.states.WorkState;
 import com.kpfu.itis.khakov.multiremark.entity.task.Answer;
 import com.kpfu.itis.khakov.multiremark.entity.task.Task;
+import com.kpfu.itis.khakov.multiremark.entity.type.StageType;
 import com.kpfu.itis.khakov.multiremark.entity.type.TaskType;
+import com.kpfu.itis.khakov.multiremark.entity.work.StageStatus;
 import com.kpfu.itis.khakov.multiremark.entity.work.Work;
+import com.kpfu.itis.khakov.multiremark.entity.work.WorkStage;
 import com.kpfu.itis.khakov.multiremark.entity.work.WorkType;
+import com.kpfu.itis.khakov.multiremark.repository.work.WorkTypeRepository;
 import com.kpfu.itis.khakov.multiremark.service.AnswerService;
 import com.kpfu.itis.khakov.multiremark.service.StudentService;
 import com.kpfu.itis.khakov.multiremark.service.TaskService;
 import com.kpfu.itis.khakov.multiremark.service.WorkService;
+import com.kpfu.itis.khakov.multiremark.service.WorkStageService;
 import com.kpfu.itis.khakov.multiremark.utils.ApplicationUrls;
 import com.kpfu.itis.khakov.multiremark.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +43,18 @@ public class RestWorkController {
 	private final TaskService taskService;
 	private final AnswerService answerService;
 	private final WorkService workService;
+	private final WorkStageService workStageService;
+	private final WorkTypeRepository workTypeRepository;
 	private final StudentService studentService;
 
 	@Autowired
-	public RestWorkController(TaskService taskService, AnswerService answerService, WorkService workService, StudentService studentService) {
+	public RestWorkController(TaskService taskService, AnswerService answerService, WorkService workService, StudentService studentService, WorkStageService workStageService, WorkTypeRepository workTypeRepository) {
 		this.taskService = taskService;
 		this.answerService = answerService;
 		this.workService = workService;
 		this.studentService = studentService;
+		this.workStageService = workStageService;
+		this.workTypeRepository = workTypeRepository;
 	}
 
 
@@ -75,9 +86,31 @@ public class RestWorkController {
 		Task task = taskService.getTaskById(id);
 		Student student = studentService.getStudent(SecurityUtils.getCurrentUser().getId());
 		work.setState(WorkState.NEW);
+		work.setName(student.getName() + " " + task.getName());
 		work.setStudent(student);
+		work.setWorkStages(new ArrayList<>());
 		work.setTask(task);
+		WorkType workType = workTypeRepository.findFirstByType(work.getTask().getWorkType().getType());
+		WorkStage runStage = null;
+		workType.getStages().forEach(s -> {
+			WorkStage stage = new WorkStage();
+			stage.setStageStatus(StageStatus.CREATE);
+			stage.setStage(s);
+			stage = workStageService.save(stage);
+			if (stage.getStage().getType() == StageType.AUTOMATE_TEST) {
+				runStage = stage;
+			}
+			work.getWorkStages().add(stage);
+		});
 		workService.saveWork(work);
+		if (task.getWorkType().getType() == TaskType.CODE) {
+			WorkRunner runner = new MockWorkRunner();
+			if (runStage != null) {
+				runStage.setStageStatus(StageStatus.DONE);
+				runStage.setResult(runner.runWork(work).toString());
+			}
+			workStageService.save(runStage);
+		}
 		return ResponseEntity.ok().build();
 	}
 

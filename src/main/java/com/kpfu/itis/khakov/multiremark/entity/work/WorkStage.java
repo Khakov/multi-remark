@@ -17,13 +17,13 @@ public class WorkStage {
 	@GeneratedValue
 	private Long id;
 
-	@Relationship
+	@Relationship(type = "REVIEW")
 	private Review review;
 
 	@Relationship(type = "WORK_STAGES", direction = Relationship.INCOMING)
 	private TaskStage stage;
 
-	@Relationship
+	@Relationship(type = "WORK_STAGE", direction = Relationship.INCOMING)
 	private Work work;
 
 	private String result;

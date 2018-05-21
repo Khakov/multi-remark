@@ -24,4 +24,8 @@ public class ReviewService {
 	public Review getReviewById(Long reviewId) {
 		return reviewRepository.findById(reviewId).orElse(null);
 	}
+
+	public void save(Review review) {
+		reviewRepository.save(review);
+	}
 }

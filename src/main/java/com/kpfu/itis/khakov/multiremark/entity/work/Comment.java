@@ -13,7 +13,7 @@ public class Comment {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@Relationship(direction = Relationship.INCOMING)
+	@Relationship(type = "COMMENT", direction = Relationship.INCOMING)
 	private Review review;
 	private String comment;
 	private int beginString;

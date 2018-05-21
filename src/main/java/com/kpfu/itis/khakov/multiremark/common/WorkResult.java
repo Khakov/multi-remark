@@ -37,4 +37,13 @@ public class WorkResult {
 	public void setPercent(double percent) {
 		this.percent = percent;
 	}
+
+	@Override
+	public String toString() {
+		return "{" +
+				"result: " + result + '\'' +
+				", mark: " + mark +
+				", percent: "  + percent +
+				'}';
+	}
 }

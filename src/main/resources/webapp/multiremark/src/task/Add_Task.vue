@@ -10,7 +10,7 @@
         <option value="PROJECT" class="dropdown-item">PROJECT</option>
         <option value="CODE" class="dropdown-item">CODE</option><br/>
       </select><br/>
-      <button value="Send" type="button" class="btn btn-primary">Add task</button>
+      <button value="Send" type="submit" class="btn btn-primary">Add task</button>
       <br/>
     </form>
   </div>
@@ -43,11 +43,7 @@
       addTask(event) {
 //        this.task.answers.push(event.target.value);
         axios.post('/api/tasks', this.task).then(function (response) {
-          console.log(response)
-        }.bind(this))
-
-        axios.get('/main', null).then(function (response) {
-          console.log(response)
+          this.$router.push("/tasks/" + response.data.id)
         }.bind(this))
       },
       /*login_method: function (event) {

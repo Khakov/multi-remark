@@ -1,9 +1,13 @@
 <template>
   <div id="app">
-    <template v-for="stage in stages">
-      {{stage.id}}, {{stage.stageStatus}}, {{stage.stage.type}}
-      <router-link :to="{ name: 'get_stage', params: { id: t.id}}">перейти</router-link>
-    </template>
+    <table>
+      <tr v-for="stage in stages">
+        <td>{{stage.id}}</td>
+        <td>{{stage.stageStatus}}</td>
+        <td>{{stage.stage.type}}</td>
+        <router-link :to="{ name: 'get_stage', params: { id: stage.id}}">перейти</router-link>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -34,17 +38,11 @@
     created() {
       const id = this.$route.params.id;
       axios.get('/api/stages/' + id, null).then(function (response) {
-          if (response.status > 400 && response.status < 404) {
-            this.$router.push("/login")
-          } else {
-            this.stages = response.data;
-          }
+          this.stages = response.data;
         }.bind(this)
       )
     },
-    methods: {
-
-    }
+    methods: {}
   }
 </script>
 

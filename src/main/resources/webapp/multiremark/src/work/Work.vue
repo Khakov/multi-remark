@@ -4,10 +4,20 @@
     <h3>State:</h3> {{work.state}}<br/>
     <h3>Mark:</h3> {{work.workMark}}<br/>
     <h3>Stages:</h3><br/>
-    <table>
-      <tr v-for="stage in work.workStages">
-        <td>{{stage.stageStatus}}</td>
+    <table class="table">
+      <thead>
+      <td>#</td>
+      <td>тип проверки</td>
+      <td>статус</td>
+      <td>подробнее</td>
+      </thead>
+      <tr v-for="(stage, index) in work.workStages">
+        <td>{{index}}</td>
         <td>{{stage.stage.type}}</td>
+        <td>{{stage.stageStatus}}</td>
+        <td>
+          <router-link :to="{ name: 'get_stage', params: { id: stage.id}}">перейти</router-link>
+        </td>
       </tr>
     </table>
   </div>

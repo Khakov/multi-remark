@@ -2,6 +2,12 @@
   <div id="app">
     <div>
       {{tasks.name}}
+      <table class="table table-hover">
+        <tr>
+          <td> {{tasks.text}}
+          </td>
+        </tr>
+      </table>
       <div v-if="tasks.workType.type ==='TEST'">
         <h3>Questions:</h3>
         <div v-for="q in tasks.questions">
@@ -19,23 +25,43 @@
         </div>
         <br/>
         <router-link :to="{ name: 'add_question', params: { id: tasks.id}}">
-          <button class="btn-success btn-sm">add question</button></router-link>
-        <router-view></router-view>
+          <button class="btn-success btn-sm">add question</button>
+        </router-link>
       </div>
       <div v-if="tasks.workType.type ==='CODE' || tasks.workType.type ==='TEXT' || tasks.workType.type ==='PROJECT'">
         <h3>Standarts:</h3>
-        <div v-for="s in tasks.standarts">
-          <div> {{s.id}}
-          </div>
-        </div>
+        <table class="table">
+          <tr v-for="(s, index) in tasks.standarts">
+            <td> {{index + 1}}</td>
+            <td>{{s.name}}</td>
+            <td>
+              <router-link :to="{ name: 'get_standart', params: { id: s.id}}">
+                <button class="btn-success btn-sm">show</button>
+              </router-link>
+            </td>
+          </tr>
+        </table>
+        <router-link :to="{ name: 'add_standart', params: { id: tasks.id}}">
+          <button class="btn-success btn-sm">add standart</button>
+        </router-link>
         <br/>
       </div>
       <div v-if="tasks.workType.type ==='CODE' || tasks.workType.type ==='PROJECT'">
         <h3>Tests:</h3>
-        <div v-for="t in tasks.tests">
-          <div> {{t.id}}
-          </div>
-        </div>
+        <table class="table">
+          <tr v-for="t in tasks.tests">
+            <td>{{index + 1}} test</td>
+            <td>
+              <router-link :to="{ name: 'get_test', params: { id: t.id}}">
+                <button class="btn-success btn-sm">show test</button>
+              </router-link>
+            </td>
+          </tr>
+        </table>
+        <br/>
+        <router-link :to="{ name: 'add_test', params: { id: tasks.id}}">
+          <button class="btn-success btn-sm">add standart</button>
+        </router-link>
       </div>
     </div>
     <router-view></router-view>

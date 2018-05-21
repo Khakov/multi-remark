@@ -24,7 +24,7 @@ public class WorkType {
 	@Relationship(type = "TASK_TYPES", direction = Relationship.INCOMING)
 	private List<Task> tasks;
 
-	@Relationship(type = "TASK_STAGES", direction = Relationship.OUTGOING)
+	@Relationship(type = "TASK_STAGES")
 	private List<TaskStage> stages;
 
 	public Long getId() {

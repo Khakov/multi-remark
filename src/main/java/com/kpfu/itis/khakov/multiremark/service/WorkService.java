@@ -7,7 +7,9 @@ import com.kpfu.itis.khakov.multiremark.entity.work.StageStatus;
 import com.kpfu.itis.khakov.multiremark.entity.work.Work;
 import com.kpfu.itis.khakov.multiremark.entity.work.WorkAnswer;
 import com.kpfu.itis.khakov.multiremark.entity.work.WorkStage;
+import com.kpfu.itis.khakov.multiremark.repository.work.ReviewRepository;
 import com.kpfu.itis.khakov.multiremark.repository.work.WorkRepository;
+import com.kpfu.itis.khakov.multiremark.repository.work.WorkStageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +22,15 @@ import java.util.stream.Collectors;
 @Service
 public class WorkService {
 	private final WorkRepository workRepository;
+	private final WorkStageRepository workStageRepository;
+	private final ReviewRepository reviewRepository;
+
 
 	@Autowired
-	public WorkService(WorkRepository workRepository) {
+	public WorkService(WorkRepository workRepository, WorkStageRepository workStageRepository, ReviewRepository reviewRepository) {
 		this.workRepository = workRepository;
+		this.workStageRepository = workStageRepository;
+		this.reviewRepository = reviewRepository;
 	}
 
 	public void createWork(Student student, Task task, List<Answer> answers, String text) {
@@ -110,11 +117,13 @@ public class WorkService {
 		}
 		if (w.getWorkStages() != null) {
 			w.getWorkStages().forEach(s -> {
+				s = workStageRepository.findById(s.getId()).orElse(s);
 				s.setWork(null);
 				s.getStage().setWorkTypes(null);
 				s.getStage().setStages(null);
 				s.getStage().setTasks(null);
 				if (s.getReview() != null) {
+					s.setReview(reviewRepository.findById(s.getReview().getId()).orElse(s.getReview()));
 					s.getReview().setStudent(null);
 					s.getReview().setTeacher(null);
 					s.getReview().setWorkStage(null);
@@ -143,14 +152,6 @@ public class WorkService {
 		Task task = work.getTask();
 		if (task.getStages() != null) {
 			task.getStages().forEach(s -> {
-				WorkStage stage = new WorkStage();
-				stage.setStageStatus(StageStatus.CREATE);
-				s.addWorkStage(stage);
-				work.addWorkStage(stage);
-			});
-		}
-		if (task.getWorkType() != null && task.getWorkType().getStages() != null) {
-			task.getWorkType().getStages().forEach(s -> {
 				WorkStage stage = new WorkStage();
 				stage.setStageStatus(StageStatus.CREATE);
 				s.addWorkStage(stage);

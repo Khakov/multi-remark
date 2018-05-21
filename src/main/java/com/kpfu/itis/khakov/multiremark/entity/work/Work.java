@@ -73,7 +73,7 @@ public class Work {
 	/*	@Relationship(type = "WORK_STATUS")
 	private WorkStatus status;*/
 
-	@Relationship
+	@Relationship(type = "WORK_STAGE")
 	private List<WorkStage> workStages;
 
 	public void addWorkStage(WorkStage stage) {

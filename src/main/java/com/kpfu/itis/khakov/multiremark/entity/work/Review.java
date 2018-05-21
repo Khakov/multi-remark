@@ -25,12 +25,12 @@ public class Review {
 
 	private String reviewType;
 
-	@Relationship(direction = Relationship.INCOMING)
+	@Relationship(type = "REVIEW", direction = Relationship.INCOMING)
 	private WorkStage workStage;
 
 	private String reviewStatus;
 
-	@Relationship
+	@Relationship(type = "COMMENT")
 	private List<Comment> comments;
 
 	public Long getId() {

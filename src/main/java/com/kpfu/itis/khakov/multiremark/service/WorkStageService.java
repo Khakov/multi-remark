@@ -20,4 +20,8 @@ public class WorkStageService {
 	public WorkStage getStageById(Long id) {
 		return workStageRepository.findById(id).orElse(null);
 	}
+
+	public WorkStage save(WorkStage workStage) {
+		return workStageRepository.save(workStage);
+	}
 }
