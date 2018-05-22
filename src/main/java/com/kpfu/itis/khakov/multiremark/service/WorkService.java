@@ -13,6 +13,10 @@ import com.kpfu.itis.khakov.multiremark.repository.work.WorkStageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -173,4 +177,34 @@ public class WorkService {
 		}
 		return work;
 	}
+
+	public void analyzeCode(Long studentId, Long workId) {
+		try {
+			URL url = new URL("http://localhost:9000/api/duplications/show?key=test:test:" + studentId + "/" + workId + ".java");
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("GET");
+			connection.setUseCaches(false);
+
+			int code = connection.getResponseCode();
+
+			if (code == HttpURLConnection.HTTP_OK) {
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(connection.getInputStream(), "utf8"));
+				String answer = "";
+				String line = null;
+
+				while ((line = reader.readLine()) != null) {
+					answer += line;
+				}
+				reader.close();
+				System.out.println(answer);
+			}
+
+			connection.disconnect();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

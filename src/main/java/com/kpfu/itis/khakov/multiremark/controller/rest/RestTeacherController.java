@@ -5,6 +5,7 @@ import com.kpfu.itis.khakov.multiremark.entity.roles.Role;
 import com.kpfu.itis.khakov.multiremark.entity.roles.Student;
 import com.kpfu.itis.khakov.multiremark.entity.roles.Teacher;
 import com.kpfu.itis.khakov.multiremark.entity.roles.User;
+import com.kpfu.itis.khakov.multiremark.entity.states.WorkMark;
 import com.kpfu.itis.khakov.multiremark.entity.type.StageType;
 import com.kpfu.itis.khakov.multiremark.entity.work.Comment;
 import com.kpfu.itis.khakov.multiremark.entity.work.Review;
@@ -49,6 +50,17 @@ public class RestTeacherController {
 		this.teacherService = teacherService;
 		this.reviewService = reviewService;
 		this.commentService = commentService;
+	}
+
+	@PostMapping(ApplicationUrls.WORK_MARK)
+	public ResponseEntity<WorkMark> teacherMark(@PathVariable Long id, @RequestBody WorkMark workMark) {
+		WorkStage stage = workStageService.getStageById(id);
+		stage.setStageStatus(StageStatus.DONE);
+		stage.setResult(workMark.toString());
+		Work work = workService.getWorkById(stage.getWork().getId());
+		work.setWorkMark(workMark);
+		workService.saveWork(work);
+		return ResponseEntity.ok(workMark);
 	}
 
 	@PostMapping(ApplicationUrls.CREATE_COMMENT)
@@ -138,14 +150,5 @@ public class RestTeacherController {
 			}
 		}
 		return ResponseEntity.ok(review);
-//		Work work = workService.getWorkById(workId);
-//		if (work == null){
-//			return null;
-//		}
-//		List<WorkStage> stages = work.getWorkStages();
-//		if(stages == null){
-//			return null;
-//		}
-//		stages.get(0).getStage()
 	}
 }

@@ -30,8 +30,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,25 +93,43 @@ public class RestWorkController {
 		work.setWorkStages(new ArrayList<>());
 		work.setTask(task);
 		WorkType workType = workTypeRepository.findFirstByType(work.getTask().getWorkType().getType());
-		WorkStage runStage = null;
+		final WorkStage[] runStage = {null};
 		workType.getStages().forEach(s -> {
 			WorkStage stage = new WorkStage();
 			stage.setStageStatus(StageStatus.CREATE);
 			stage.setStage(s);
 			stage = workStageService.save(stage);
 			if (stage.getStage().getType() == StageType.AUTOMATE_TEST) {
-				runStage = stage;
+				runStage[0] = stage;
 			}
 			work.getWorkStages().add(stage);
 		});
 		workService.saveWork(work);
 		if (task.getWorkType().getType() == TaskType.CODE) {
 			WorkRunner runner = new MockWorkRunner();
-			if (runStage != null) {
-				runStage.setStageStatus(StageStatus.DONE);
-				runStage.setResult(runner.runWork(work).toString());
+			if (runStage[0] != null) {
+				runStage[0].setStageStatus(StageStatus.DONE);
+				runStage[0].setResult(runner.runWork(work).toString());
 			}
-			workStageService.save(runStage);
+			workStageService.save(runStage[0]);
+			FileOutputStream fos = null;
+			try {
+				File file =  new File(work.getStudent().getId() + "/" + work.getId() + ".java");
+				file.getParentFile().mkdirs();
+				fos = new FileOutputStream(file);
+				String text = work.getWorkAnswer().getText();
+				fos.write(text.getBytes(),0,text.length());
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (fos!= null){
+					try {
+						fos.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 		return ResponseEntity.ok().build();
 	}

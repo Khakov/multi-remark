@@ -91,6 +91,18 @@
       }
     },
     created() {
+      /*axios.post('http://localhost:9000/api/authentication/login?login=admin&password=admin', null, {
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+      }).then(function (response) {
+        console.log(response.data);
+      });
+      var key = 'test:test:src/main/java/com/kpfu/itis/khakov/multiremark/controller/LoginController.java';
+      axios.get('http://localhost:9000/api/duplications/show?key=' + key).then(function (response) {
+        console.log(response.data);
+      });*/
+
       axios.get('/api/user', null).then(function (response) {
         this.$store.commit('add_user', response.data);
         console.log(this.$store.state.user);

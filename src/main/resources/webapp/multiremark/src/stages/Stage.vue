@@ -125,6 +125,12 @@
         axios.post('/api/review-done/' + id, null).then(function (response) {
           this.$router.push("/tasks")
         }.bind(this))
+      },
+      addMark() {
+        let id = this.stage.id;
+        axios.post('/api/mark/' + id, null).then(function (response) {
+          this.$router.push("/tasks")
+        }.bind(this))
       }
     }
   }

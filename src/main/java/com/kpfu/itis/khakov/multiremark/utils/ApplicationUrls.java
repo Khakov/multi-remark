@@ -33,6 +33,5 @@ public class ApplicationUrls {
 	public static final String GET_WORK_STAGES_EDIT = API_URL + "/stage-edit/{id}";
 	public static final String GET_WORK_STAGE = API_URL + "/stage/{id}";
 	public static final String REVIEW_DONE = API_URL + "/review-done/{id}";
-
-
+	public static final String WORK_MARK = API_URL + "/mark/{id}";
 }
